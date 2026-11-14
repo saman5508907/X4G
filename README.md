@@ -1,33 +1,41 @@
 # PayPilot
 
-PayPilot is an MVP for small businesses to track customers, invoices, outstanding balances, and payment reminders.
+PayPilot is an early-stage invoice and customer tracking app for small businesses.
 
-## Features
+## Included
 - Account registration and login
-- Dashboard with invoice totals
-- Customer create/list/delete
-- Invoice create/list/update/delete
-- Overdue invoice status
-- Copy-ready payment reminder message
-- PostgreSQL on Railway, SQLite for local development
+- Argon2 password hashing
+- Signed, HTTP-only session cookie
+- CSRF protection on state-changing forms
+- Per-account data isolation
+- Customer and invoice tracking
+- Copy-ready payment reminder text
+- PostgreSQL support for Railway and SQLite for local development
+- Security response headers
 
-## Run locally
-1. Install Python 3.11+
-2. Create a virtual environment.
-3. Install dependencies: `pip install -r requirements.txt`
-4. Copy `.env.example` to `.env` and set a long random `SECRET_KEY`.
-5. Run: `uvicorn app.main:app --reload`
-6. Open `http://127.0.0.1:8000`
+## Deploy on Railway
+1. Push this complete repository to GitHub.
+2. In Railway, create a project and choose **Deploy from GitHub repo**.
+3. Add a PostgreSQL service to the Railway project.
+4. In the web service variables, add:
+   - `APP_ENV=production`
+   - `SECRET_KEY` = a long random secret (at least 32 characters)
+   - `DATABASE_URL` = reference the PostgreSQL service's `DATABASE_URL`
+   - `ALLOWED_HOSTS` = your Railway domain, and your custom domain if used
+5. Redeploy. Railway uses the included `Procfile`.
 
-## Deploy to Railway
-1. Push the complete repository to GitHub.
-2. In Railway, create a project and deploy from the GitHub repository.
-3. Add a PostgreSQL database service.
-4. In the web service variables, set `DATABASE_URL` to the PostgreSQL connection variable exposed by Railway (usually `${{Postgres.DATABASE_URL}}`).
-5. Set `SECRET_KEY` to a long random value.
-6. Railway uses the included Procfile. If needed, set the start command to:
-   `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-7. Generate a Railway domain from the service settings.
+Never commit `.env`, real passwords, customer data, or production credentials.
 
-## Important
-This is an MVP foundation, not a finished regulated payment platform. It does not move money, connect to banks, or send emails automatically. Reminder text is generated locally and must be reviewed before sending. Before public launch, add CSRF protection, rate limiting, email verification, password reset, audit logs, backups, privacy/legal pages, and security testing. Do not enter real customer financial or personal data until those controls are implemented.
+## Local run
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+pip install -r requirements.txt
+cp .env.example .env
+# For local testing, set APP_ENV=development and set a long random SECRET_KEY.
+uvicorn app.main:app --reload
+```
+Open http://127.0.0.1:8000
+
+## Important limitations before real commercial use
+This is a secure-minded MVP foundation, not a security certification. Before handling real customer or financial data, add automated tests, database migrations (Alembic), persistent backups and restore drills, account recovery, email verification, login throttling/WAF, audit logs, privacy/terms pages, monitoring, and an independent security review. Payment collection and automatic email sending are intentionally not implemented.

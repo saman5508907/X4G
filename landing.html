@@ -1,16 +1,14 @@
-{% extends "base.html" %}
-{% block content %}
-<section class="hero">
-  <div class="eyebrow">SMARTER ACCOUNTS RECEIVABLE</div>
-  <h1>Get paid faster.<br><span>Stay in control.</span></h1>
-  <p class="hero-copy">A calmer way to track invoices, follow up on late payments, and understand your cash flow.</p>
-  <div class="hero-actions"><a class="btn primary" href="/register">Start free</a><a class="btn secondary" href="/login">Log in</a></div>
-  <div class="trust-note">Simple invoice tracking for growing businesses</div>
-</section>
-<section class="feature-grid">
-  <article class="feature"><div class="feature-icon">▤</div><h3>Invoice clarity</h3><p>See what is paid, pending, and overdue in one clean workspace.</p></article>
-  <article class="feature"><div class="feature-icon">↗</div><h3>Timely follow-ups</h3><p>Create thoughtful payment reminders without starting from a blank page.</p></article>
-  <article class="feature"><div class="feature-icon">◷</div><h3>Cash-flow snapshot</h3><p>Understand outstanding balances and paid invoices at a glance.</p></article>
-</section>
-<section class="bottom-cta"><h2>Your next payment deserves a better follow-up.</h2><a class="btn primary" href="/register">Create your workspace</a></section>
+{% extends "base.html" %}{% block title %}PayPilot — Get paid on time{% endblock %}{% block content %}
+<section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="dot"></span> SIMPLE FINANCE WORKSPACE FOR SMALL TEAMS</div>
+<h1>Know what’s owed.<br><em>Get paid sooner.</em></h1><p class="lead">Keep customers, invoices and payment follow-ups in one calm, organized workspace. Spend less time chasing details and more time running your business.</p>
+<div class="actions"><a class="btn primary" href="/register">Create your workspace <span>→</span></a><a class="btn ghost" href="/login">I already have an account</a></div>
+<div class="trustline"><span>✓ Private workspace</span><span>✓ Simple invoice tracking</span><span>✓ No payment credentials required</span></div></div>
+<div class="preview"><div class="preview-top"><span>PAYPILOT OVERVIEW</span><span class="live">● YOUR BUSINESS</span></div><div class="preview-title">Cash flow snapshot <span>•••</span></div>
+<div class="preview-cards"><div><small>Outstanding</small><b>$8,420</b><i class="orange">Needs follow-up</i></div><div><small>Collected</small><b>$12,680</b><i class="green">On track</i></div></div>
+<div class="bar-label"><span>Recent invoices</span><span>View all</span></div><div class="fake-row"><span class="avatar a1">AC</span><span><b>Acme Creative</b><small>Website project</small></span><strong>$2,400</strong><label>Due soon</label></div>
+<div class="fake-row"><span class="avatar a2">NS</span><span><b>Northstar Studio</b><small>Monthly retainer</small></span><strong>$1,200</strong><label class="paid">Paid</label></div>
+<div class="fake-row"><span class="avatar a3">BL</span><span><b>Brightline Labs</b><small>Consulting</small></span><strong>$980</strong><label>Overdue</label></div></div></section>
+<section class="features"><div><span class="feature-icon">01</span><h3>One clear overview</h3><p>See invoice totals, outstanding balances and recent activity at a glance.</p></div>
+<div><span class="feature-icon">02</span><h3>Customer records</h3><p>Keep customer contact details together and link them to their invoices.</p></div>
+<div><span class="feature-icon">03</span><h3>Gentle follow-ups</h3><p>Create ready-to-send reminder messages without awkward wording.</p></div></section>
 {% endblock %}

@@ -1,13 +1,21 @@
-function copyReminder() {
-  const field = document.getElementById("reminderText");
-  if (!field) return;
-  navigator.clipboard.writeText(field.value).then(() => {
-    const status = document.getElementById("copyStatus");
-    if (status) status.textContent = "Copied to clipboard";
-  }).catch(() => {
-    field.select();
-    document.execCommand("copy");
-    const status = document.getElementById("copyStatus");
-    if (status) status.textContent = "Copied";
-  });
-}
+document.addEventListener("click", async (event) => {
+  const copyButton = event.target.closest("[data-copy]");
+  if (copyButton) {
+    const field = document.querySelector(copyButton.dataset.copy);
+    if (!field) return;
+    try {
+      await navigator.clipboard.writeText(field.value);
+      const old = copyButton.textContent;
+      copyButton.textContent = "Copied!";
+      setTimeout(() => copyButton.textContent = old, 1600);
+    } catch {
+      field.focus(); field.select();
+      document.execCommand("copy");
+      copyButton.textContent = "Copied!";
+    }
+  }
+});
+document.addEventListener("submit", (event) => {
+  const form = event.target.closest("[data-confirm]");
+  if (form && !window.confirm(form.dataset.confirm)) event.preventDefault();
+});

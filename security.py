@@ -1,25 +1,34 @@
-from pwdlib import PasswordHash
-from itsdangerous import URLSafeSerializer
-import os
+import secrets
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError, InvalidHashError
+from fastapi import Request, HTTPException
 
-password_hash = PasswordHash.recommended()
-serializer = URLSafeSerializer(os.getenv("SECRET_KEY", "dev-only-change-me"), salt="paypilot-auth")
+_hasher = PasswordHasher(time_cost=3, memory_cost=65536, parallelism=2, hash_len=32, salt_len=16)
 
 def hash_password(password: str) -> str:
-    return password_hash.hash(password)
+    return _hasher.hash(password)
 
-def verify_password(password: str, hashed: str) -> bool:
+def verify_password(password: str, password_hash: str) -> bool:
     try:
-        return password_hash.verify(password, hashed)
-    except Exception:
+        return _hasher.verify(password_hash, password)
+    except (VerifyMismatchError, InvalidHashError):
         return False
 
-def make_session(user_id: int) -> str:
-    return serializer.dumps({"uid": user_id})
+def csrf_token(request: Request) -> str:
+    token = request.session.get("csrf")
+    if not token:
+        token = secrets.token_urlsafe(32)
+        request.session["csrf"] = token
+    return token
 
-def read_session(token: str):
-    try:
-        data = serializer.loads(token)
-        return int(data["uid"])
-    except Exception:
-        return None
+async def require_csrf(request: Request):
+    supplied = request.headers.get("x-csrf-token")
+    if not supplied:
+        try:
+            form = await request.form()
+            supplied = form.get("csrf_token")
+        except Exception:
+            supplied = None
+    expected = request.session.get("csrf")
+    if not expected or not supplied or not secrets.compare_digest(str(expected), str(supplied)):
+        raise HTTPException(status_code=403, detail="درخواست معتبر نیست. صفحه را تازه‌سازی کنید.")

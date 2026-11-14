@@ -1,25 +1,9 @@
-{% extends "base.html" %}
-{% block title %}Dashboard — PayPilot{% endblock %}
-{% block content %}
-<section class="page-head"><div><div class="eyebrow">OVERVIEW</div><h1>Your dashboard</h1><p class="muted">Here is the latest snapshot of your receivables.</p></div><a class="btn primary" href="/invoices/new">＋ New invoice</a></section>
-<section class="stats">
-  <article class="stat"><span>Outstanding</span><strong>{{ (outstanding / 100)|money }}</strong><small>Unpaid invoices</small></article>
-  <article class="stat"><span>Collected</span><strong>{{ (paid_total / 100)|money }}</strong><small>Marked as paid</small></article>
-  <article class="stat"><span>Overdue invoices</span><strong>{{ overdue_count }}</strong><small>Past their due date</small></article>
-  <article class="stat"><span>Customers</span><strong>{{ customer_count }}</strong><small>In your workspace</small></article>
-</section>
-<section class="panel">
-  <div class="panel-head"><div><h2>Recent invoices</h2><p class="muted">Track each payment from one place.</p></div><a class="text-link" href="/customers">Manage customers →</a></div>
-  {% if invoices %}
-  <div class="table-wrap"><table><thead><tr><th>Invoice</th><th>Customer</th><th>Due date</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody>
-  {% for inv in invoices %}<tr>
-    <td><strong>{{ inv.number }}</strong><small class="subline">{{ inv.description }}</small></td>
-    <td>{{ inv.customer.name }}</td><td>{{ inv.due_date.strftime('%b %d, %Y') }}</td>
-    <td class="amount">{{ (inv.amount_cents / 100)|money(inv.currency) }}</td>
-    <td>{% if inv.status == 'paid' %}<span class="pill paid">Paid</span>{% elif inv.due_date < today %}<span class="pill overdue">Overdue</span>{% else %}<span class="pill pending">Unpaid</span>{% endif %}</td>
-    <td class="actions"><a href="/invoices/{{ inv.id }}/reminder">Reminder</a><form method="post" action="/invoices/{{ inv.id }}/status"><input type="hidden" name="status" value="{{ 'unpaid' if inv.status == 'paid' else 'paid' }}"><button class="mini-button" type="submit">{{ 'Undo paid' if inv.status == 'paid' else 'Mark paid' }}</button></form><form method="post" action="/invoices/{{ inv.id }}/delete" onsubmit="return confirm('Delete this invoice?')"><button class="mini-button danger-text" type="submit">Delete</button></form></td>
-  </tr>{% endfor %}
-  </tbody></table></div>
-  {% else %}<div class="empty"><div class="empty-icon">▤</div><h3>No invoices yet</h3><p>Add a customer, then create your first invoice.</p><a class="btn primary" href="/customers">Add a customer</a></div>{% endif %}
-</section>
+{% extends "base.html" %}{% block title %}Overview — PayPilot{% endblock %}{% block content %}
+<div class="pagehead"><div><div class="eyebrow">YOUR WORKSPACE</div><h1>Good to see you.</h1><p class="muted">Here’s the latest view of your invoices and customers.</p></div><a class="btn primary" href="/invoices/new">＋ New invoice</a></div>
+<section class="stats"><div class="stat"><span>Total invoiced</span><b>{{ "%.2f"|format(total) }}</b><small>Across all invoices · mixed currencies</small></div><div class="stat highlight"><span>Outstanding</span><b>{{ "%.2f"|format(unpaid) }}</b><small>Invoices not marked as paid</small></div><div class="stat"><span>Customers</span><b>{{ customers_count }}</b><small>In your workspace</small></div></section>
+<div class="section-head"><div><h2>Recent invoices</h2><p class="muted">Track what has been sent and what is still due.</p></div><a href="/customers" class="textlink">Manage customers →</a></div>
+<div class="table-wrap"><table><thead><tr><th>Invoice</th><th>Customer</th><th>Due date</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+{% for inv in invoices %}<tr><td><b>{{ inv.number }}</b><small>{{ inv.description }}</small></td><td>{{ inv.customer.name }}</td><td>{{ inv.due_date }}</td><td>{{ inv.currency }} {{ "%.2f"|format(inv.amount) }}</td><td><span class="pill {{ 'success' if inv.status=='paid' else 'warning' }}">{{ inv.status }}</span></td><td class="actions-cell">
+{% if inv.status != 'paid' %}<a href="/invoices/{{ inv.id }}/reminder">Reminder</a><form method="post" action="/invoices/{{ inv.id }}/paid"><input type="hidden" name="csrf_token" value="{{ csrf }}"><button class="mini-btn">Mark paid</button></form>{% else %}—{% endif %}</td></tr>
+{% else %}<tr><td colspan="6" class="empty">No invoices yet. Add a customer, then create your first invoice.</td></tr>{% endfor %}</tbody></table></div>
 {% endblock %}

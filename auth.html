@@ -1,16 +1,11 @@
-{% extends "base.html" %}
-{% block title %}{{ 'Create account' if mode == 'register' else 'Log in' }} — PayPilot{% endblock %}
-{% block content %}
-<section class="auth-wrap"><div class="auth-card">
-  <div class="eyebrow">YOUR FINANCE WORKSPACE</div>
-  <h1>{{ 'Create your account' if mode == 'register' else 'Welcome back' }}</h1>
-  <p class="muted">{{ 'Start organizing your invoices today.' if mode == 'register' else 'Log in to manage your invoices.' }}</p>
-  {% if error %}<div class="alert">{{ error }}</div>{% endif %}
-  <form method="post" action="{{ '/register' if mode == 'register' else '/login' }}" class="stack">
-    <label>Email address<input type="email" name="email" required autocomplete="email" placeholder="you@company.com"></label>
-    <label>Password<input type="password" name="password" required minlength="{{ 10 if mode == 'register' else 1 }}" autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}" placeholder="••••••••••"></label>
-    <button class="btn primary full" type="submit">{{ 'Create account' if mode == 'register' else 'Log in' }}</button>
-  </form>
-  <p class="switch-auth">{% if mode == 'register' %}Already have an account? <a href="/login">Log in</a>{% else %}New to PayPilot? <a href="/register">Create an account</a>{% endif %}</p>
-</div></section>
+{% extends "base.html" %}{% block title %}{{ 'Create account' if mode=='register' else 'Log in' }} — PayPilot{% endblock %}{% block content %}
+<section class="auth-wrap"><div class="auth-card"><div class="auth-icon">P</div><div class="eyebrow">YOUR BUSINESS, IN CONTROL</div>
+<h1>{{ 'Create your workspace' if mode=='register' else 'Welcome back' }}</h1><p class="muted">{{ 'Start organizing invoices and customers.' if mode=='register' else 'Log in to continue to your dashboard.' }}</p>
+{% if error %}<div class="alert">{{ error }}</div>{% endif %}
+<form method="post" action="{{ '/register' if mode=='register' else '/login' }}" class="stack">
+<input type="hidden" name="csrf_token" value="{{ csrf }}"><label>Email address<input type="email" name="email" required maxlength="254" autocomplete="email" placeholder="you@company.com"></label>
+<label>Password<input type="password" name="password" required minlength="{{ 12 if mode=='register' else 1 }}" maxlength="128" autocomplete="{{ 'new-password' if mode=='register' else 'current-password' }}" placeholder="{{ 'At least 12 characters' if mode=='register' else 'Your password' }}"></label>
+<button class="btn primary full">{{ 'Create account' if mode=='register' else 'Log in securely' }} <span>→</span></button></form>
+<p class="switch">{{ 'Already have an account?' if mode=='register' else 'New to PayPilot?' }} <a href="{{ '/login' if mode=='register' else '/register' }}">{{ 'Log in' if mode=='register' else 'Create an account' }}</a></p>
+</div><div class="auth-side"><div class="big-quote">“A little more clarity can make a big difference.”</div><p>Simple tools for the business you’re building.</p></div></section>
 {% endblock %}

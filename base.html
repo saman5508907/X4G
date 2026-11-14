@@ -1,17 +1,11 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PayPilot helps small businesses track invoices and payment follow-ups.">
-  <title>{% block title %}PayPilot — Get paid faster{% endblock %}</title>
-  <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-<header class="topbar">
-  <a class="brand" href="/"><span class="brand-mark">P</span> PayPilot</a>
-  <nav>{% if user is defined and user %}<a href="/dashboard">Dashboard</a><a href="/customers">Customers</a><form method="post" action="/logout" class="inline"><button class="nav-button">Log out</button></form>{% else %}<a href="/login">Log in</a><a class="nav-cta" href="/register">Get started</a>{% endif %}</nav>
-</header>
-<main>{% block content %}{% endblock %}</main>
-<footer class="footer"><span>© 2026 PayPilot</span><span>Built for clearer cash flow.</span></footer>
-<script src="/static/app.js"></script>
-</body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1220"><title>{% block title %}PayPilot{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/styles.css"></head><body>
+<header class="topbar"><a class="brand" href="/"><span class="brandmark">P</span> PayPilot</a>
+{% if user %}<nav><a href="/dashboard">Overview</a><a href="/customers">Customers</a><a href="/invoices/new">New invoice</a></nav>
+<form method="post" action="/logout"><input type="hidden" name="csrf_token" value="{{ csrf }}"><button class="linkbtn">Log out</button></form>
+{% else %}<nav><a href="/login">Log in</a><a class="nav-cta" href="/register">Get started</a></nav>{% endif %}</header>
+<main>{% block content %}{% endblock %}</main><footer>PayPilot · Clear invoices. Confident cash flow.</footer>
+<script src="/static/app.js" defer></script></body></html>
