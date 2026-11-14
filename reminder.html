@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Payment reminder — PayPilot{% endblock %}
+{% block content %}
+<section class="page-head"><div><div class="eyebrow">FOLLOW-UP</div><h1>Payment reminder</h1><p class="muted">Review this draft before sending it yourself.</p></div><a class="btn secondary" href="/dashboard">← Dashboard</a></section>
+<section class="panel reminder-panel"><div class="reminder-meta"><span>Invoice {{ invoice.number }}</span><span>{{ invoice.customer.name }}</span><strong>{{ (invoice.amount_cents / 100)|money(invoice.currency) }}</strong></div>
+<label>Suggested email<textarea id="reminderText" rows="12" readonly>{{ body }}</textarea></label>
+<div class="form-actions"><button class="btn primary" type="button" onclick="copyReminder()">Copy reminder</button><span id="copyStatus" class="muted"></span></div>
+<p class="fine-print">PayPilot has not sent this message. Copy it into your own email app after reviewing the details.</p></section>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PayPilot helps small businesses track invoices and payment follow-ups.">
+  <title>{% block title %}PayPilot — Get paid faster{% endblock %}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><span class="brand-mark">P</span> PayPilot</a>
+  <nav>{% if user is defined and user %}<a href="/dashboard">Dashboard</a><a href="/customers">Customers</a><form method="post" action="/logout" class="inline"><button class="nav-button">Log out</button></form>{% else %}<a href="/login">Log in</a><a class="nav-cta" href="/register">Get started</a>{% endif %}</nav>
+</header>
+<main>{% block content %}{% endblock %}</main>
+<footer class="footer"><span>© 2026 PayPilot</span><span>Built for clearer cash flow.</span></footer>
+<script src="/static/app.js"></script>
+</body></html>

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Customers — PayPilot{% endblock %}
+{% block content %}
+<section class="page-head"><div><div class="eyebrow">RELATIONSHIPS</div><h1>Customers</h1><p class="muted">Keep customer details organized.</p></div><a class="btn secondary" href="/dashboard">← Dashboard</a></section>
+<div class="two-col">
+<section class="panel"><div class="panel-head"><h2>Add a customer</h2></div>
+<form method="post" action="/customers" class="stack">
+<label>Customer name<input name="name" required maxlength="160" placeholder="Acme Studio"></label>
+<label>Email<input type="email" name="email" placeholder="accounts@company.com"></label>
+<label>Company<input name="company" maxlength="160" placeholder="Company name"></label>
+<button class="btn primary" type="submit">Save customer</button>
+</form></section>
+<section class="panel"><div class="panel-head"><h2>Your customers</h2><span class="count">{{ customers|length }}</span></div>
+{% if customers %}<div class="customer-list">{% for c in customers %}<div class="customer-row"><div class="avatar">{{ c.name[:1]|upper }}</div><div class="customer-info"><strong>{{ c.name }}</strong><small>{{ c.company or c.email or 'No extra details' }}</small></div><form method="post" action="/customers/{{ c.id }}/delete" onsubmit="return confirm('Delete this customer?')"><button class="mini-button danger-text" type="submit">Delete</button></form></div>{% endfor %}</div>{% else %}<div class="empty compact"><p>No customers added yet.</p></div>{% endif %}
+</section></div>
+{% endblock %}

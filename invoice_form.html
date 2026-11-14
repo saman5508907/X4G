@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}New invoice — PayPilot{% endblock %}
+{% block content %}
+<section class="page-head"><div><div class="eyebrow">RECEIVABLES</div><h1>Create an invoice</h1><p class="muted">Add the details you need to track a payment.</p></div><a class="btn secondary" href="/dashboard">← Dashboard</a></section>
+<section class="panel form-panel">
+{% if customers %}<form method="post" action="/invoices" class="form-grid">
+<label class="span-2">Customer<select name="customer_id" required>{% for c in customers %}<option value="{{ c.id }}">{{ c.name }}{% if c.company %} — {{ c.company }}{% endif %}</option>{% endfor %}</select></label>
+<label>Invoice number<input name="number" required maxlength="40" placeholder="INV-1001"></label>
+<label>Amount<input name="amount" type="number" min="0.01" step="0.01" required placeholder="1250.00"></label>
+<label>Currency<select name="currency"><option>USD</option><option>EUR</option><option>GBP</option><option>CAD</option><option>AUD</option></select></label>
+<label>Due date<input name="due_date" type="date" required></label>
+<label class="span-2">Description<input name="description" maxlength="240" placeholder="Website design project"></label>
+<div class="span-2 form-actions"><button class="btn primary" type="submit">Create invoice</button></div>
+</form>{% else %}<div class="empty"><h3>Add a customer first</h3><p>Invoices need to be linked to a customer.</p><a class="btn primary" href="/customers">Add your first customer</a></div>{% endif %}
+</section>
+{% endblock %}
